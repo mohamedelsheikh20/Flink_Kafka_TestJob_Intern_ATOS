@@ -20,9 +20,6 @@
 * `Use flink walkthrough library`
   * implementation group: 'org.apache.flink', name: 'flink-walkthrough-common_2.12', version: '1.14.0'
 
-
-Collect most of tkinter GUI commands [Tkinter tutorial](https://www.tutorialspoint.com/python/python_gui_programming.htm).
-
 ---
 
 ## * Add Kafka Producer to add data into kafka using java
@@ -370,3 +367,8 @@ Collect most of tkinter GUI commands [Tkinter tutorial](https://www.tutorialspoi
 
 
 ---
+## Output Shape:
+![output shape](https://github.com/mohamedelsheikh20/Flink_Kafka_TestJob_Intern_ATOS/assets/65075222/b2b0c37d-c619-4ed3-b049-964f13155819)
+
+* show each account Id transactions at the end of the day.
+* show immediatly if account is exceeded certain amount.
