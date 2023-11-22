@@ -1,0 +1,104 @@
+1. windowing (check if we can add it to implementation).
+2. complex events (fraud Detection using kafka "Java")
+ 
+task is :
+	aggregate transactions, exceed limit of bank or not (limit is fixed in code for now)
+
+
+-windowing and complex event 
+-kafka
+
+
+
+path of my project to run it directly:
+/flink/flink-1.14.0/bin/start-cluster.sh
+/flink/flink-1.14.0/bin/stop-cluster.sh
+
+cd workspace/test_job/src/main/java
+
+/flink/flink-1.14.0/bin/start-cluster.sh
+
+// run with fraud detect
+javac -cp /flink/flink-1.14.0/lib/*:. workspace/test_job/src/main/java/test_flink_job.java workspace/test_job/src/main/java/test_fraud_detector.java
+java -cp "/flink/flink-1.14.0/lib/*:workspace/test_job/src/main/java/" test_flink_job
+
+
+// run with fraud with parameter
+javac -cp /flink/flink-1.14.0/lib/*:. workspace/test_job/src/main/java/test_flink_job.java workspace/test_job/src/main/java/test_fraud_detector.java
+java -cp "/flink/flink-1.14.0/lib/*:workspace/test_job/src/main/java/" test_flink_job --transaction_limit 1000
+
+
+// run without fraud detect
+javac -cp /flink/flink-1.14.0/lib/*:. workspace/test_job/src/main/java/test_flink_job.java
+java -cp "/flink/flink-1.14.0/lib/*:workspace/test_job/src/main/java/" test_flink_job
+
+
+// run producer code
+javac -cp /flink/flink-1.14.0/lib/*:. workspace/test_job/src/main/java/test_kafka_producer.java
+java -cp "/flink/flink-1.14.0/lib/*:workspace/test_job/src/main/java/" test_kafka_producer
+
+
+
+// add data to kafka using docker
+/kafka/confluent-6.2.1/bin/kafka-console-producer --broker-list localhost:9092 --topic transactions
+
+// add data to kafka using PowerShell
+docker exec -it clever_bell /kafka/confluent-6.2.1/bin/kafka-console-producer --broker-list localhost:9092 --topic transactions
+
+
+// check data
+/kafka/confluent-6.2.1/bin/kafka-console-consumer --bootstrap-server localhost:9092 --topic transactions --from-beginning
+
+
+// data
+
+{"account_id": 101, "amount": 120.50, "timestamp": "2023-11-01T09:30:00"}
+{"account_id": 202, "amount": 250.20, "timestamp": "2023-11-01T11:45:00"}
+{"account_id": 303, "amount": 180.30, "timestamp": "2023-11-01T14:00:00"}
+{"account_id": 404, "amount": 300.45, "timestamp": "2023-11-01T16:15:00"}
+{"account_id": 505, "amount": 80.60, "timestamp": "2023-11-01T18:30:00"}
+{"account_id": 606, "amount": 150.75, "timestamp": "2023-11-02T08:15:00"}
+{"account_id": 707, "amount": 280.90, "timestamp": "2023-11-02T10:30:00"}
+{"account_id": 808, "amount": 200.40, "timestamp": "2023-11-02T12:45:00"}
+{"account_id": 909, "amount": 350.55, "timestamp": "2023-11-02T15:00:00"}
+{"account_id": 111, "amount": 120.70, "timestamp": "2023-11-02T17:15:00"}
+{"account_id": 222, "amount": 180.85, "timestamp": "2023-11-03T09:30:00"}
+{"account_id": 333, "amount": 90.20, "timestamp": "2023-11-03T11:45:00"}
+{"account_id": 444, "amount": 300.35, "timestamp": "2023-11-03T14:00:00"}
+{"account_id": 555, "amount": 220.50, "timestamp": "2023-11-03T16:15:00"}
+{"account_id": 666, "amount": 150.65, "timestamp": "2023-11-03T18:30:00"}
+{"account_id": 777, "amount": 250.80, "timestamp": "2023-11-04T08:15:00"}
+{"account_id": 888, "amount": 130.95, "timestamp": "2023-11-04T10:30:00"}
+{"account_id": 999, "amount": 180.10, "timestamp": "2023-11-04T12:45:00"}
+{"account_id": 111, "amount": 280.25, "timestamp": "2023-11-04T15:00:00"}
+{"account_id": 222, "amount": 320.40, "timestamp": "2023-11-04T17:15:00"}
+{"account_id": 333, "amount": 90.55, "timestamp": "2023-11-05T09:30:00"}
+{"account_id": 444, "amount": 200.70, "timestamp": "2023-11-05T11:45:00"}
+{"account_id": 555, "amount": 150.85, "timestamp": "2023-11-05T14:00:00"}
+{"account_id": 666, "amount": 110.00, "timestamp": "2023-11-05T16:15:00"}
+{"account_id": 777, "amount": 270.15, "timestamp": "2023-11-05T18:30:00"}
+{"account_id": 888, "amount": 180.30, "timestamp": "2023-11-06T08:15:00"}
+{"account_id": 999, "amount": 150.45, "timestamp": "2023-11-06T10:30:00"}
+{"account_id": 111, "amount": 280.60, "timestamp": "2023-11-06T12:45:00"}
+{"account_id": 222, "amount": 200.75, "timestamp": "2023-11-06T15:00:00"}
+{"account_id": 333, "amount": 130.90, "timestamp": "2023-11-06T17:15:00"}
+{"account_id": 444, "amount": 250.05, "timestamp": "2023-11-07T09:30:00"}
+{"account_id": 555, "amount": 110.20, "timestamp": "2023-11-07T11:45:00"}
+{"account_id": 666, "amount": 180.35, "timestamp": "2023-11-07T14:00:00"}
+{"account_id": 777, "amount": 300.50, "timestamp": "2023-11-07T16:15:00"}
+{"account_id": 888, "amount": 220.65, "timestamp": "2023-11-07T18:30:00"}
+{"account_id": 999, "amount": 150.80, "timestamp": "2023-11-08T08:15:00"}
+{"account_id": 111, "amount": 120.95, "timestamp": "2023-11-08T10:30:00"}
+{"account_id": 222, "amount": 180.10, "timestamp": "2023-11-08T12:45:00"}
+{"account_id": 333, "amount": 280.25, "timestamp": "2023-11-08T15:00:00"}
+{"account_id": 444, "amount": 320.40, "timestamp": "2023-11-08T17:15:00"}
+{"account_id": 555, "amount": 90.55, "timestamp": "2023-11-09T09:30:00"}
+{"account_id": 666, "amount": 200.70, "timestamp": "2023-11-09T11:45:00"}
+{"account_id": 777, "amount": 150.85, "timestamp": "2023-11-09T14:00:00"}
+{"account_id": 888, "amount": 110.00, "timestamp": "2023-11-09T16:15:00"}
+{"account_id": 999, "amount": 270.15, "timestamp": "2023-11-09T18:30:00"}
+{"account_id": 111, "amount": 180.30, "timestamp": "2023-11-10T08:15:00"}
+{"account_id": 222, "amount": 150.45, "timestamp": "2023-11-10T10:30:00"}
+
+
+

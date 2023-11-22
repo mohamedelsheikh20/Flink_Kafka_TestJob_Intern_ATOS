@@ -1,0 +1,57 @@
+In Windows PowerShell
+1- docker pull apache/flink:1.17.1
+2- docker run -p 8081:8081 -it apache/flink:1.17.1 bash
+3-  docker start <container_name>
+
+In docker
+4- apt-get update
+5- apt-get install -y openjdk-11-jdk
+
+6- Install Intellij (https://www.youtube.com/watch?v=viNG3VVnzFE)
+7- Install JDK Version 11 (https://www.oracle.com/eg/java/technologies/javase/jdk11-archive-downloads.html)
+
+In Intellij
+8- Create Project ( Language: Java, Build System: Gradle, Gradle DSL: Groovy, JDK: 11)
+9- File -> Settings -> Plugins -> search for Docker -> Install
+10- In build.grade ADD
+
+    java {
+    sourceCompatibility = JavaVersion.VERSION_11
+    targetCompatibility = JavaVersion.VERSION_11
+   }
+
+     dependencies {
+    implementation('org.apache.flink:flink-java:1.17.1') {
+        exclude group: 'commons-collections', module: 'commons-collections'
+    }
+    implementation group: 'org.apache.flink', name: 'flink-streaming-java', version: '1.17.1'
+    implementation group: 'org.slf4j', name: 'slf4j-api', version: '1.7.15'
+    implementation group: 'ch.qos.logback', name: 'logback-classic', version: '1.2.3'
+   }
+
+  jar {
+   duplicatesStrategy = 'exclude'
+    from {
+        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+    archiveBaseName = 'your-project-name'
+    archiveVersion = '1.0-SNAPSHOT'
+    manifest {
+        attributes 'Main-Class': 'your.main.Class'
+    }
+}
+
+11- Sync 
+12- Write Code
+13- View -> Tool Windows -> Terminal 
+14- ./gradlew clean build ( in project directory a build folder will be created with a folder called libs inside it which will contains the jar file)
+
+
+In Windows PowerShell
+15- Move jar file to container (docker cp <jar_path_on_host> <container_name>:/opt/flink/)
+  
+In docker
+16-  Move to the path where jar file is contained
+17- ./bin/start-cluster.sh
+18- /opt/flink/bin/flink run <jar_file>.jar
+

@@ -1,0 +1,92 @@
+Kafka Instructions with flink in docker image
+
+In docker
+1- apt update
+2- apt install tmux (navigate between terminals ctrl_b and number starting from 0 to number of terminals)
+3- tmux (to detach ctrl b and then d) ( to attach tmux attach-session -t <number>)
+
+Inside one tmux
+4- /kafka/confluent-6.2.1/bin/zookeeper-server-start /kafka/confluent-6.2.1/etc/kafka/zookeeper.properties (to start zookeeper)
+
+Inside another tmux
+5- /kafka/confluent-6.2.1/bin/kafka-server-start /kafka/confluent-6.2.1/etc/kafka/server.properties (to start kafka)
+
+Inside a third tmux
+6-  /kafka/confluent-6.2.1/bin/kafka-console-producer --broker-list localhost:9092 --topic <your_topic_name> (to load data) 
+	(You can exit the producer by pressing Ctrl-C when you are finished)
+
+/kafka/confluent-6.2.1/bin/kafka-console-consumer --bootstrap-server localhost:9092 --topic <your_topic_name> --from-beginning (to check data)
+
+
+In intellij
+7- Add dependencies 
+{
+	implementation group: 'org.apache.kafka', name: 'kafka-clients', version: '2.8.0'
+	implementation group: 'org.apache.flink', name: 'flink-connector-kafka_2.12', version: '1.14.0'
+}
+8- Press (ctrl + Shift + A) and write (Reload all Gradle Projects) then wait until all done.
+
+
+In docker 
+(you can skip all next steps "Just run step 14" if you generate your own job JAR files) 
+
+9- cd /flink/flink-1.14.0/lib  ( go to flink JARs libraries)
+
+10- (Download flink connector kafka "flink-connector-kafka_2.12-1.14.0-tests.jar" - "flink-connector-kafka_2.12-1.14.0.jar")
+    (https://central.sonatype.com/artifact/org.apache.flink/flink-connector-kafka_2.12/1.14.0/versions)
+	wget https://repo.maven.apache.org/maven2/org/apache/flink/flink-connector-kafka_2.12/1.14.0/flink-connector-kafka_2.12-1.14.0-tests.jar
+	wget https://repo.maven.apache.org/maven2/org/apache/flink/flink-connector-kafka_2.12/1.14.0/flink-connector-kafka_2.12-1.14.0.jar
+
+11- (Download kafka clients "kafka-clients-2.8.0-test.jar" - "kafka-clients-2.8.0.jar")
+    (https://central.sonatype.com/artifact/org.apache.kafka/kafka-clients/versions)
+	wget https://repo1.maven.org/maven2/org/apache/kafka/kafka-clients/2.8.0/kafka-clients-2.8.0-test.jar
+	wget https://repo1.maven.org/maven2/org/apache/kafka/kafka-clients/2.8.0/kafka-clients-2.8.0.jar
+
+
+12- (Download kafka runtime web "flink-runtime-web_2.12-1.14.0.jar" - "flink-runtime-web_2.12-1.14.0-tests.jar")
+    (https://repo1.maven.org/maven2/org/apache/flink/flink-runtime-web_2.12/1.14.0/)
+	wget https://repo1.maven.org/maven2/org/apache/flink/flink-runtime-web_2.12/1.14.0/flink-runtime-web_2.12-1.14.0-tests.jar
+	wget https://repo1.maven.org/maven2/org/apache/flink/flink-runtime-web_2.12/1.14.0/flink-runtime-web_2.12-1.14.0.jar
+
+
+13- cd ../../../../
+	
+
+14- /flink/flink-1.14.0/bin/start-cluster.sh (to start cluster)
+
+15- (Compile your java code)
+	javac -cp /flink/flink-1.14.0/lib/*:. path/to/your/java/job/<your job java file>.java
+
+16- (Run your Job)
+	java -cp "/flink/flink-1.14.0/lib/*:path/to/your/java/job/" <your job java file>
+
+
+
+
+*-------------------------------------------------------------------------------------------------------------------------------------*
+Some Kafka commands:
+kafka bath:
+# stop kafka server to test if kafka already running or (No kafka server to stop)
+/kafka/confluent-6.2.1/bin/kafka-server-stop    
+
+// you must add those commands only if your kafka server running
+# Add new data
+/kafka/confluent-6.2.1/bin/kafka-console-producer --broker-list localhost:9092 --topic <your_topic_name>
+
+# check existing data
+/kafka/confluent-6.2.1/bin/kafka-console-consumer --bootstrap-server localhost:9092 --topic <your_topic_name> --from-beginning
+
+# check existing topics
+/kafka/confluent-6.2.1/bin/kafka-topics --list --bootstrap-server localhost:9092
+
+# Create new Topic
+/kafka/confluent-6.2.1/bin/kafka-topics --create --topic <your_topic_name> --bootstrap-server localhost:9092
+
+# Delete certain topic
+/kafka/confluent-6.2.1/bin/kafka-topics --zookeeper localhost:2181 --delete --topic <your_topic_name>
+
+# check groups
+/kafka/confluent-6.2.1/bin/kafka-consumer-groups --bootstrap-server localhost:9092 --list
+
+# consume messages
+/kafka/confluent-6.2.1/bin/kafka-console-consumer --topic <Your topic name> --bootstrap-server localhost:9092 --from-beginning 

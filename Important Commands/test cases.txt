@@ -1,0 +1,46 @@
+(first day) 
+- time stamp 2023-11-10T10:30:00 (same day) (account ID : 1)
+Transaction{accountId=1, timestamp=1698937200000, amount=250.55}
+
+- time stamp 2023-11-10T11:35:00 (same day) (account ID : 1)
+Transaction{accountId=1, timestamp=1698941700000, amount=650.15}
+
+(here ID 1 didn't exceed the limit of the transactions 901.1)
+
+
+(next day)
+- timestamp 2023-11-11T10:30:00 (second day) (account ID : 1 "to make sure that he didn't add it to the prev day")
+Transaction{accountId=1, timestamp=1699023600000, amount=950.25}
+
+- time stamp 2023-11-11T11:10:22 (same day) (account ID : 2)
+Transaction{accountId=2, timestamp=1699029022000, amount=850.24}
+
+- time stamp 2023-11-11T11:59:11 (same day) (account ID : 2)
+Transaction{accountId=2, timestamp=1699033151000, amount=250.24}
+
+same prev timestamp with new account ID : 4, but exceeded the value at the first time
+Transaction{accountId=4, timestamp=1699033151000, amount=250.24}
+
+(here ID 1 didn't exceed the limit but ID 2 has exceeded it in the second transaction 1100.48)
+
+(day next)
+- "2023-11-12T10:30:00" (account ID : 3)
+Transaction{accountId=3, timestamp=1699110000000, amount=1150.24}
+
+(same day)
+- "2023-11-12T11:30:00"  (account ID : 3)
+Transaction{accountId=3, timestamp=1699075800000, amount=150.04}
+
+- "2023-11-13T10:30:00"
+Transaction{accountId=3, timestamp=1699196400000, amount=1150.24}
+
+- "2023-11-14T10:30:00"
+Transaction{accountId=4, timestamp=1699282800000, amount=1000.24}	
+
+- "2023-11-15T10:30:00"
+Transaction{accountId=5, timestamp=1699369200000, amount=950.24}
+
+- "2023-11-16T10:30:00" 
+Transaction{accountId=5, timestamp=1699455600000, amount=950.24}
+
+
